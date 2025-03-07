@@ -164,6 +164,7 @@ header button:hover {
 .display input[type="text"],
 .display input[type="date"],
 .display select,
+.display .input,
 .display textarea {
   width: 100%;
   padding: 10px;
