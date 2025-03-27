@@ -94,7 +94,6 @@ body {
   display: none;
   justify-content: center;
   align-items: center;
-
 }
 
 .container {
@@ -126,7 +125,7 @@ header button {
   cursor: pointer;
 }
 
-header button:hover {
+header button:hover{
   animation: rotate 0.5s ease-in-out 1;
   background-color: #ffc300;
 }
@@ -141,7 +140,7 @@ header button:hover {
     -moz-transform: rotate(360deg);
     -ms-transform: rotate(360deg);
     -o-transform: rotate(360deg);
-}
+  }
 }
 
 .display {
@@ -161,8 +160,8 @@ header button:hover {
   color: #ffd700;
 }
 
-.display input[type="text"],
-.display input[type="date"],
+.display input[type='text'],
+.display input[type='date'],
 .display select,
 .display .input,
 .display textarea {
@@ -190,12 +189,6 @@ header button:hover {
   cursor: pointer;
 }
 
-.display div:last-child {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 15px;
-}
-
 .display button {
   padding: 10px 18px;
   border-radius: 6px;
@@ -204,7 +197,7 @@ header button:hover {
   font-weight: bold;
 }
 
-.display button:first-child {
+.submit {
   background: transparent;
   border: 1px solid #ffd700;
   color: #ffd700;
@@ -216,79 +209,183 @@ header button:hover {
   color: white;
 }
 
-.display button:first-child:hover {
-  background: rgba(255, 215, 0, 0.2);
+.submit:hover {
+  background-color: #ffd700;
+  color: #1a1a2e;
+  border: 1px solid #0f0f0f;
 }
 
 .display button:last-child:hover {
   background: #cc0000;
 }
 
-.checkbox {
+.checkBox {
   display: flex;
   align-items: center;
   gap: 10px;
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
+  padding: 0 10px 10px 0;
 }
 
-.checkbox input[type="checkbox"] {
+.checkBox input[type='checkbox'] {
   width: 18px;
   height: 18px;
   accent-color: #ff4c4c;
+  color: #0f0f0f;
   cursor: pointer;
 }
 
-.checkbox:hover label {
+.checkBox:hover label {
   color: #ffd700;
+  font-size: 18px;
 }
 
-.checkbox input[type="checkbox"]:focus {
+.checkBox input[type='checkbox']:focus,
+.checkBox input[type='checkbox'] :hover {
   outline: 2px solid #ffd700;
   outline-offset: 2px;
+  opacity: 0.3;
 }
 
 .title {
   font-size: 24px;
   font-weight: bold;
   color: #eaeaea;
-  
 }
 
-.title:hover, .projectInfo:hover {
-    color: #FFD700;
-    background-color: rgba(35, 57, 93, 0.3);
-    transition: all 0.3s ease-in-out;
-  }
+.title:hover,
+.projectInfo:hover {
+  color: #ffd700;
+  background-color: rgba(35, 57, 93, 0.3);
+  transition: all 0.3s ease-in-out;
+}
 
 .details {
   width: 100%;
-  height: 100vh;
   display: flex;
   flex-direction: column;
   color: white;
+  padding: 0 0 0 10px;
 }
 
-.projectInfo{
-    width: 100%;
-    height: 50px;
-    padding: 10px 20px;
-    font-weight: bold;
-    font-size: 18px;
-    border-bottom: 1px solid #ffd700;
-    cursor: pointer;
+.projectInfo {
+  width: 100%;
+  height: 50px;
+  padding: 10px 20px;
+  font-weight: bold;
+  font-size: 18px;
+  border-bottom: 1px solid #ffd700;
+  cursor: pointer;
 }
 
-
-.activities{
+.activities {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid #ffd700;
   padding: 12px;
   cursor: pointer;
 }
-.activities:hover{
+.activities:hover {
   background-color: rgba(35, 57, 93, 0.3);
-  color: #FFD700;
+  color: #ffd700;
+}
+.displaysDiv {
+  display: flex;
+  flex-direction: column;
+  background-color: #1a1a2e;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.headerDiv {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  min-height: 9vh;
+  background: #16213e;
+  border-radius: 8px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.dislayHeader {
+  font-size: 1.5em;
+  font-weight: bold;
+  font-family: "Arial Narrow Bold", sans-serif;
+  color: #ffd700;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.buttonsDiv {
+  display: flex;
+  gap: 12px;
+}
+
+.activityAddBtn, .deleteProject {
+  font-size: 1.8em;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+.activityAddBtn {
+  background: linear-gradient(145deg, #ffd700, #e6c200);
+  color: #1a1a2e;
+}
+
+.deleteProject {
+  background: linear-gradient(145deg, #ff4c4c, #cc0000);
+  color: white;
+}
+
+.activityAddBtn:hover, .deleteProject:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
+.postItSection {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background-color: #1a1a3a;
+  gap: 8%;
+  flex: auto;
+  padding: 15px 25px;
+  flex-wrap: wrap;
+  border-radius: 8px;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.postIt {
+  cursor: pointer;
+  min-height: 120px;
+  min-width: 120px;
+  border-radius: 15px;
+  padding: 10px;
+  text-align: center;
+  margin-top: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.postIt h1 {
+  font-size: 1.1em;
+  color: white;
+  font-weight: bold;
+}
+
+.postIt p {
+  font-size: 0.9em;
+  color: #fdd;
+}
+
+.postIt:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
