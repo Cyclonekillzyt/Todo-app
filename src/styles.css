@@ -351,7 +351,6 @@ header button:hover{
 
 .postItSection {
   width: 100%;
-  height: 100%;
   display: flex;
   background-color: #1a1a3a;
   gap: 8%;

@@ -13,12 +13,17 @@ import {
   checkPriorityValue,
   addProject,
   addActivity,
+  saveActivityEdit
 } from './coreLogic';
 import {
   populateProject,
   populateActivities,
   createInnerDisplay,
+  createActivitiesDisplay,
+  displayActivityEdit,
+  deletePostIt,
 } from './createElements';
+import { items } from '.';
 import { exitBtn } from './getDomElements';
 import { projectDisplay } from './getDomElements';
 import { priority } from './getDomElements';
@@ -27,9 +32,9 @@ export let editIndex = null;
 export let newTask = false;
 export let editPostIt = false;
 let tasks = null;
+export let state = null;
 export function handleClicks() {
   let projectId;
-  let state = null;
   addProjectBtn.addEventListener('click', () => {
     showProjectForm();
     checkPriorityValue(priority);
@@ -45,13 +50,14 @@ export function handleClicks() {
           );
         }
         if (event.target.classList.contains('activityAddBtn')) {
+          console.log(event.target)
           showActivityForm();
           checkPriorityValue(priority);
           state = 'activity';
           newTask = true;
           editPostIt = false;
-          projectId =
-            event.target.closest('[data-unique-info]').dataset.uniqueInfo;
+          projectId = event.target.closest('[data-unique-info]').id;
+          console.log(projectId);
         }
         if (event.target.classList.contains('activityEditBtn')) {
           newTask = false;
@@ -62,8 +68,10 @@ export function handleClicks() {
           console.log(tasks);
         }
         if (event.target.classList.contains('delete')) {
+          deletePostIt(event.target.parentElement.parentElement.id);
           handleActivityDelete(event.target.parentElement.parentElement.id);
           event.target.parentElement.parentElement.remove();
+          
         }
         if (event.target.classList.contains('deleteProject')) {
           const uniqueInfo =
@@ -86,17 +94,24 @@ export function handleClicks() {
       e.preventDefault();
       const addProj = addProject();
       let proj = addProj.proj;
-      let id = addProj.id;
-      checkElementCount();
-      populateProject(proj, id);
+      populateProject(proj);
       createInnerDisplay(proj);
       hideForm();
-    } else if (state == 'activity') {
+    } else if (state == 'activity' && newTask) {
       e.preventDefault();
       const addActivities = addActivity(projectId);
       let activities = addActivities.activity;
-      let id = addActivities.activityId;
-      populateActivities(activities, projectId, id, tasks, newTask);
+      populateActivities(activities, projectId);
+      createActivitiesDisplay(projectId, activities);
+      console.log(items)
+      hideForm();
+    }
+    else if(state == 'activity' && !newTask){
+      e.preventDefault();
+      const editActivites = saveActivityEdit(editIndex);
+      let activityToEdit = editActivites.activityToEdit;
+      displayActivityEdit(tasks, activityToEdit)
+      console.log(items);
       hideForm();
     }
   });

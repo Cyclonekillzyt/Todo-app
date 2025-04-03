@@ -2,9 +2,8 @@ import { title } from './getDomElements';
 import { description } from './getDomElements';
 import { dueDate } from './getDomElements';
 import { done } from './getDomElements';
-import { newTask, editPostIt } from './handleClicks';
-import { editIndex } from './handleClicks';
-const items = [];
+import { newTask, editIndex } from './handleClicks';
+import { items } from '.';
 let activitiesArray = null;
 let activity = null;
 let priorityValue = null;
@@ -14,7 +13,7 @@ class Project {
     this.title = title;
     this.dueDate = dueDate;
     this.priority = priority;
-    this.id = Date.now();
+    this.id = Date.now().toString();
     this.activities = [];
   }
 }
@@ -26,15 +25,15 @@ class Activity {
     this.dueDate = dueDate;
     this.priority = priority;
     this.done = done;
-    this.id = Date.now();
+    this.id = Date.now().toString();
   }
 }
 
 function addProject() {
   const proj = new Project(title.value, dueDate.value, priorityValue || 'Low');
-  let id = proj.id;
   items.push(proj);
-  return { id, proj };
+  localStorage.setItem('items', JSON.stringify(items));
+  return { proj };
 }
 
 function addActivity(id) {
@@ -45,37 +44,25 @@ function addActivity(id) {
     priorityValue || 'Low',
     done.checked
   );
-  let activityId = task.id;
-  const targetObject = items.find((proj) => proj.id == id);
-  if (targetObject) {
-    if (newTask) {
-      targetObject.activities.push(task);
-    } else {
-      const activityToEdit = targetObject.activities.find(
-        (activity) => activity.id == editIndex
-      );
-      if (activityToEdit) {
-        activityToEdit.title = task.title;
-        activityToEdit.description = task.description;
-        activityToEdit.dueDate = task.dueDate;
-        activityToEdit.priority = task.priority;
-        activityToEdit.done = task.done;
-      }
-    }
+  const targetProject = items.find((proj) => proj.id == id);
+  if (targetProject) {
+    targetProject.activities.push(task);
+    localStorage.setItem('items', JSON.stringify(items));
   } else {
-    throw new error(`Project with ID ${id} not found`);
+    throw new Error(`Project with ID ${id} not found`);
   }
-
   activity = task;
   const activityElements = document.querySelectorAll('.activityEditBtn');
-  return { activity, activityElements, activityId };
+  return { activity, activityElements };
 }
 
 function handleActivityEdit(edit) {
+  console.log(edit);
+  console.log(items);
   let parentArray = items.find((proj) =>
     proj.activities.some((child) => child.id == edit)
   );
-    activitiesArray = parentArray.activities;
+  activitiesArray = parentArray.activities;
   let find = activitiesArray.find((activity) => activity.id == edit);
   if (find) {
     title.value = find.title;
@@ -91,6 +78,26 @@ function handleActivityEdit(edit) {
     activitiesArray.push(activity);
   }
 }
+
+function saveActivityEdit(id) {
+  let parentArray = items.find((proj) =>
+    proj.activities.some((child) => child.id == id)
+  );
+  const activityToEdit = parentArray.activities.find(
+    (activity) => activity.id == id
+  );
+  if (activityToEdit) {
+    activityToEdit.title = title.value;
+    activityToEdit.description = description.value;
+    activityToEdit.dueDate = dueDate.value;
+    activityToEdit.priority = priorityValue;
+    activityToEdit.done = done.checked;
+    localStorage.setItem('items', JSON.stringify(items));
+  }
+  localStorage.setItem('items', JSON.stringify(items));
+  return { activityToEdit };
+}
+
 function handleActivityDelete(id) {
   let parentArray = items.find((proj) =>
     proj.activities.some((child) => child.id == id)
@@ -100,11 +107,13 @@ function handleActivityDelete(id) {
     (activity) => activity.id == id
   );
   activitiesArray.splice(activityIndex, 1);
+  localStorage.setItem('items', JSON.stringify(items));
 }
 
 function handleProjectDelete(id) {
   const projectIndex = items.findIndex((proj) => proj.id == id);
   items.splice(projectIndex, 1);
+  localStorage.setItem('items', JSON.stringify(items));
 }
 
 function checkPriorityValue(el) {
@@ -123,4 +132,5 @@ export {
   handleActivityDelete,
   handleProjectDelete,
   checkPriorityValue,
+  saveActivityEdit,
 };

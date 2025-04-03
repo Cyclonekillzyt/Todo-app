@@ -1,10 +1,13 @@
-import { details, projectDisplay } from './getDomElements';
-import { element1 } from '../../Restaurant-Page/src/home';
+import { details, projectDisplay, testDisplay } from './getDomElements';
+import { items } from '.';
+import {checkElementCount} from './handleFormToggle';
+let postIt = null;
 
-function populateProject(proj, id) {
+function populateProject(proj) {
   const projectElement = document.createElement('div');
   projectElement.classList.add('project');
-  projectElement.dataset.uniqueInfo = id;
+  projectElement.dataset.uniqueInfo = proj.id;
+  projectElement.id = proj.id;
   projectElement.innerHTML = `
         <div class="projects">
             <div class="projectId" id="projectId">
@@ -18,8 +21,9 @@ function populateProject(proj, id) {
   projectDisplay.append(projectElement);
 }
 
-function createInnerDisplay(info) {
-  const div = createDomElement('div', info.id, 'displaysDiv');
+function createInnerDisplay(proj) {
+  checkElementCount();
+  const div = createDomElement('div', proj.id, 'displaysDiv');
   const headerSection = createDomElement('div', 'headerDiv', 'headerDiv');
   const buttonsDiv = createDomElement('div', 'buttonsDiv', 'buttonsDiv');
   const header = createDomElement('h1', 'dislayHeader', 'dislayHeader');
@@ -33,12 +37,12 @@ function createInnerDisplay(info) {
     'deleteProject',
     'deleteProject'
   );
-  const postItSection = createDomElement('div', info.id, 'postItSection');
+  const postItSection = createDomElement('div', proj.id, 'postItSection');
 
-  div.dataset.uniqueInfo = info.id;
+  div.dataset.uniqueInfo = proj.id;
   div.style.height = '100%';
   div.style.width = '100%';
-  header.textContent = info.title;
+  header.textContent = proj.title;
 
   addActivitiesBtn.textContent = '+';
   deleteActivitiesBtn.textContent = '🗑';
@@ -49,15 +53,12 @@ function createInnerDisplay(info) {
 
   div.append(postItSection);
   details.appendChild(div);
-  priorityColor(info, headerSection);
+  priorityColor(proj, headerSection);
 }
 
 function populateActivities(
   activities,
   projectId,
-  id,
-  activityElement,
-  newTask
 ) {
   const projectElement = document.querySelector(
     `[data-unique-info="${projectId}"]`
@@ -66,27 +67,27 @@ function populateActivities(
     throw new Error(`Project with ID ${projectId} not found`);
   }
 
-  if (newTask) {
-    activityElement = document.createElement('div');
-    activityElement.classList.add('activities');
-    activityElement.dataset.uniqueInfo = projectId;
-    activityElement.id = id;
-    activityElement.innerHTML = `
+  
+    const activityTask = document.createElement('div');
+    activityTask.classList.add('activities');
+    activityTask.dataset.uniqueInfo = projectId;
+    activityTask.id = activities.id;
+    activityTask.innerHTML = `
         <p class="title">${activities.title}</p>
           <div class="buttons">
             <button class="activityEditBtn" id="activityEditBtn">🖉</button>
             <button class="delete">🗑</button>
           </div>`;
-    priorityColor(activities, activityElement);
-    done(activities, activityElement);
-    createActivitiesDisplay(projectId, activities);
-    projectElement.append(activityElement);
-  } else {
-  activityElement.querySelector('.title').textContent = activities.title;    updatePostIt(id, activities);
+    priorityColor(activities, activityTask);
+    done(activities, activityTask);
+    projectElement.append(activityTask);
+}
 
-    priorityColor(activities, activityElement);
-    done(activities, activityElement);
-  }
+function displayActivityEdit(activityElement, activities) {
+  activityElement.querySelector('.title').textContent = activities.title;
+  updatePostIt(activities.id, activities);
+  priorityColor(activities, activityElement);
+  done(activities, activityElement);
 }
 
 function createActivitiesDisplay(projectId, activity) {
@@ -115,16 +116,30 @@ function createActivitiesDisplay(projectId, activity) {
 
 function updatePostIt(id, activities) {
   const postIts = document.querySelectorAll('.postIt');
-  let postIt = null;
-  postIts.forEach((el)=>{
-    if (el.id = id){
+  
+  postIts.forEach((el) => {
+    if ((el.id == id)) {
       postIt = el;
     }
-    postIt.children[0].textContent = activities.title ;
-    postIt.children[1].textContent = `${activities.description}, due by ${activities.dueDate}`;
-    priorityColor(activities, postIt);
-  })
-  
+    return postIt
+  });
+  postIt.children[0].textContent = activities.title;
+  postIt.children[1].textContent = `${activities.description}, due by ${activities.dueDate}`;
+  priorityColor(activities, postIt);
+  done(activities, postIt);
+  console.log(postIt.id)
+}
+
+function deletePostIt(id){
+  const postIts = document.querySelectorAll('.postIt');
+
+  postIts.forEach((el) => {
+    if (el.id == id) {
+      postIt = el;
+    }
+    return postIt;
+  });
+  postIt.remove();
 }
 
 function priorityColor(priorityValue, projectDiv) {
@@ -148,6 +163,9 @@ function done(activity, activityElement) {
   if (activity.done) {
     activityElement.style.backgroundColor = 'grey';
   }
+  else{
+    priorityColor(activity, activityElement)
+  }
 }
 
 function createDomElement(type, id, className) {
@@ -162,4 +180,7 @@ export {
   populateProject,
   populateInfo,
   createInnerDisplay,
+  createActivitiesDisplay,
+  displayActivityEdit,
+  deletePostIt
 };
