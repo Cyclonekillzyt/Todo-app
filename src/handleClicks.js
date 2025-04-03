@@ -44,28 +44,33 @@ export function handleClicks() {
   [projectDisplay, details].forEach((el) => {
     if (el) {
       el.addEventListener('click', (event) => {
-        if (event.target.classList.contains('projectId')) {
+        if (
+          event.target.classList.contains('projectId') ||
+          event.target.closest('.projectId')
+        ) {
           checkElementCount(
             event.target.closest('[data-unique-info]').dataset.uniqueInfo
           );
         }
         if (event.target.classList.contains('activityAddBtn')) {
-          console.log(event.target)
           showActivityForm();
           checkPriorityValue(priority);
           state = 'activity';
           newTask = true;
           editPostIt = false;
           projectId = event.target.closest('[data-unique-info]').id;
-          console.log(projectId);
         }
-        if (event.target.classList.contains('activityEditBtn')) {
+        if (
+          event.target.classList.contains('activityEditBtn') ||
+          (event.target.parentElement &&
+            event.target.parentElement.classList.contains('activityEditBtn'))
+        ) {
           newTask = false;
           editIndex = event.target.parentElement.parentElement.id;
+          state = 'activity';
           tasks = event.target.parentElement.parentElement;
           handleActivityEdit(editIndex);
           showActivityForm();
-          console.log(tasks);
         }
         if (event.target.classList.contains('delete')) {
           deletePostIt(event.target.parentElement.parentElement.id);
